@@ -59,7 +59,7 @@ input:focus {
 label {
     position: absolute;
     left: 0;
-    top: 50%;
+    top: 1rem;
     transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
@@ -120,6 +120,19 @@ label {
 .form-submit:hover {
     background: #4292dc;
 }
+input.invalid {
+    border-color: #e74c3c;
+}
+input.valid {
+    border-color: #c3e6cb;
+}
+span.invalid {
+    color: #e74c3c;
+}
+span.valid {
+    color: #c3e6cb;
+}
+
 @media screen and (max-width: 1200px){
     .container {
         width: calc(80% - 1rem);

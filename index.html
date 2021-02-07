@@ -16,26 +16,31 @@
             <div class="container">
                 <div class="personal-form">
                     <h2 class="form-title">Personal Information</h2>
-                    <form method="POST" class="register-form" id="register-form">
+                    <form method="POST" class="registerForm" id="registerForm">
                         <div class="form-group">
                             <label for="name"><i class="fas fa-user"></i></label>
-                            <input type="text" id="name" name="name" placeholder="Your Name*" maxlength="50" required autofocus/>
+                            <input type="text" id="name" name="name" placeholder="Your Name*" maxlength="50" autofocus/>
+                            <span class="invalid"></span>
                         </div>
                         <div class="form-group">
                             <label for="address"><i class="fas fa-map-marker-alt"></i></label>
-                            <input type="text" id="address" name="address" placeholder="Your Address*" maxlength="255" required/>
+                            <input type="text" id="address" name="address" placeholder="Your Address*" maxlength="255"/>
+                            <span class="invalid"></span>
                         </div>
                         <div class="form-group">
                             <label for="email"><i class="fas fa-at"></i></label>
-                            <input type="email" id="email" name="email" placeholder="Your Email*" maxlength="255" required/>
+                            <input type="text" id="email" name="email" placeholder="Your Email*" maxlength="255" />
+                            <span class="invalid"></span>
                         </div>
                         <div class="form-group">
                             <label for="phone"><i class="fas fa-mobile-alt"></i></label>
-                            <input type="tel" id="phone" name="phone" placeholder="Your Phone*" maxlength="20" required/>
+                            <input type="text" id="phone" name="phone" placeholder="Your Phone*" maxlength="15" />
+                            <span class="invalid"></span>
                         </div>
                         <div class="form-group">
                             <label for="website"><i class="fas fa-globe"></i></label>
-                            <input type="url" id="website" name="website" placeholder="Your Website*" maxlength="255" required/>
+                            <input type="text" id="website" name="website" placeholder="Your Website*" maxlength="255" />
+                            <span class="invalid"></span>
                         </div>
                         <div class="form-group form-button">
                             <input type="submit" name="register" id="register" class="form-submit" value="Register"/>
