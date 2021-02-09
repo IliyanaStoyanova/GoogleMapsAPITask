@@ -47,9 +47,10 @@ function validateUrl(input) {
     return regExp.test(input.value.trim()) ? valid(input) : invalid(input, 'Invalid url format');
 }
 
+
 /*Submit Form*/
 form.addEventListener('submit', (event) => {
-    let flEmpty=flName=flEmail=flPhone=flWebsite=true;
+    let flEmpty=flName=flAddress=flEmail=flPhone=flWebsite=true;
     let valid;
 
     document.querySelectorAll('.registerForm input[type=text]').forEach(function(element) {
@@ -58,6 +59,10 @@ form.addEventListener('submit', (event) => {
         if(element.id === 'name' && valid){
             valid = specialChar(element, "Name must not contain special characters and numbers!");
             if(!valid) flName = false;
+        }
+        if(element.id === 'address' && valid){
+            valid = isExistPlace(element);
+            if(!valid) flAddress = false;
         }
         if(element.id === 'email' && valid){
             valid = validateEmail(element);
