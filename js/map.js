@@ -21,9 +21,11 @@ function initAddress(){
         center: { lat: 42.7249925, lng: 25.4833039 },
         zoom: 7,
     });
+    const icon = './images/pin_red.png';
     const marker = new google.maps.Marker({
         map,
-        anchorPoint: new google.maps.Point(0, -29),
+        icon: icon,
+        anchorPoint: new google.maps.Point(0, -45),
     });
 
     const infowindowContent = document.getElementById("place-address");
