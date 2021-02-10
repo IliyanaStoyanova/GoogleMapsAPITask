@@ -47,6 +47,38 @@ function validateUrl(input) {
     return regExp.test(input.value.trim()) ? valid(input) : invalid(input, 'Invalid url format');
 }
 
+/*Check have email is exist in Local Storage*/
+function checkExist(){
+    let arr = JSON.parse(localStorage.getItem('persons'));
+    let elem = document.getElementById('email');
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i].email === elem.value) {
+            return invalid(elem, "This email is exist in Local Storage");
+        }
+    }
+    return valid(elem);
+}
+
+/*Save Personal Information in Local Storage*/
+function saveToLocalStorage(){
+    let personStorage = window.localStorage;
+    let persons;
+    const person = {
+        name: document.getElementById('name').value,
+        address: document.getElementById('address').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        website: document.getElementById('website').value
+    };
+
+    if(personStorage.getItem('persons') === null){
+        persons = [];
+    }else{
+        persons = JSON.parse(personStorage.getItem('persons'));
+    }
+    persons.push(person);
+    personStorage.setItem('persons', JSON.stringify(persons));
+}
 
 /*Submit Form*/
 form.addEventListener('submit', (event) => {
@@ -66,6 +98,7 @@ form.addEventListener('submit', (event) => {
         }
         if(element.id === 'email' && valid){
             valid = validateEmail(element);
+            if(valid) valid = checkExist();
             if(!valid) flEmail = false;
         }
         if(element.id === 'phone' && valid){
@@ -79,5 +112,7 @@ form.addEventListener('submit', (event) => {
     });
     if(!flEmpty || !flName || !flEmail || !flPhone || !flWebsite){
         event.preventDefault();
+    }else{
+        saveToLocalStorage();
     }
 });
