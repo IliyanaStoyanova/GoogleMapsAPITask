@@ -49,14 +49,17 @@ function validateUrl(input) {
 
 /*Check have email is exist in Local Storage*/
 function checkExist(){
-    let arr = JSON.parse(localStorage.getItem('persons'));
-    let elem = document.getElementById('email');
-    for(let i = 0; i < arr.length; i++){
-        if(arr[i].email === elem.value) {
-            return invalid(elem, "This email is exist in Local Storage");
+    if(window.localStorage.getItem('persons') !== null) {
+        let arr = JSON.parse(window.localStorage.getItem('persons'));
+        let elem = document.getElementById('email');
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].email === elem.value) {
+                return invalid(elem, "This email is exist in Local Storage");
+            }
         }
+        return valid(elem);
     }
-    return valid(elem);
+    return true;
 }
 
 /*Save Personal Information in Local Storage*/
@@ -70,7 +73,6 @@ function saveToLocalStorage(){
         phone: document.getElementById('phone').value,
         website: document.getElementById('website').value
     };
-
     if(personStorage.getItem('persons') === null){
         persons = [];
     }else{
