@@ -62,10 +62,21 @@
         </section>
     </div>
 
+    <script src="js/config.js"></script>
     <script src="js/main.js"></script>
     <script src="js/map.js"></script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC32pEYHR1eIwhndn-KiaofyIb4UroI4Qk&libraries=places&callback=initAddress">
+    <script>
+        function loadScript() {
+            let script = document.createElement('script');
+            script.defer = true;
+            script.async = true;
+            script.type = 'text/javascript';
+            script.src = 'https://maps.googleapis.com/maps/api/js' +
+            '?key=' + config.SECRET_KEY +'&libraries=places&callback=initAddress';
+            document.body.appendChild(script);
+        }
+
+        window.onload = loadScript;
     </script>
 </body>
 </html>
