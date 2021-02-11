@@ -1,21 +1,6 @@
 let map;
 let completeAddress;
 
-function isExistPlace(input){
-    const inputAddress = input.value;
-    const geocod = new google.maps.Geocoder();
-
-    geocod.geocode({ 'address': inputAddress,  "componentRestrictions":{"country":"BG"} }, (results, status) => {
-        if (status === "OK") {
-            if(results[0].formatted_address) {
-                return valid(input);
-            }
-            return invalid(input, 'Invalid Address!');
-        }
-        return invalid(input, 'Invalid Address!');
-    });
-}
-
 function initAddress(){
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 42.7249925, lng: 25.4833039 },
@@ -34,6 +19,7 @@ function initAddress(){
     });
 
     completeAddress = new google.maps.places.Autocomplete(
+
         document.getElementById('address'),
         {
             types: ['geocode'],
@@ -51,6 +37,7 @@ function initAddress(){
             lat: parseFloat(latlngStr[0]),
             lng: parseFloat(latlngStr[1]),
         };
+        let address = document.getElementById('address');
         geocoder.geocode({ location: coordinates }, (results, status) => {
             if (status === "OK") {
                 if (results[0]) {
@@ -58,8 +45,10 @@ function initAddress(){
                     marker.setPosition(coordinates);
                     marker.setVisible(true);
                     infowindow.setContent(results[0].formatted_address);
-                    document.getElementById('address').value = infowindow.content;
+                    address.value = infowindow.content;
                     infowindow.open(map, marker);
+                    address.classList.remove("errAddress");
+                    valid(document.getElementById('address'));
                 } else {
                     invalid(document.getElementById('address'), 'Noting result found!');
                 }
