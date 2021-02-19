@@ -1,139 +1,102 @@
-const form = document.getElementById('registerForm');
+const form = document.querySelector('.registerForm');
+const myLocalStorage = window.localStorage;
+const arrFunction = ['validateSpecialChar', 'validateEmail', 'validatePhone', 'validateUrl'];
 
-/*Error function*/
-function invalid(input, message){
-    input.classList.remove('valid');
-    input.classList.add('invalid');
-
-    let error = input.nextElementSibling;
-    error.innerText = message;
-    return false;
-}
-
-/*Success function*/
-function valid(input){
-    input.classList.remove('invalid');
-    input.classList.add('valid');
-
-    let error = input.nextElementSibling;
-    error.innerText = '';
-    return true;
-}
-
-/*Check Required fields */
-function isEmpty(input, message) {
-    if (!input.classList.contains("errAddress")){
-        return input.value.trim() === '' ? invalid(input, message) : valid(input);
+const validateObj = {
+    validateSpecialChar: function(input) {
+        const regExp =  /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
+        return regExp.test(input.value.trim()) ?
+            setErrorMessage(input, 'The field must not contain special characters and numbers!') :
+            setSuccessMessage(input);
+    },
+    validateEmail: function(input) {
+        const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| + (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regExp.test(input.value.trim()) ?
+            setSuccessMessage(input) :
+            setErrorMessage(input, 'Invalid email format!');
+    },
+    validatePhone: function(input) {
+        const regExp = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\\./0-9]*$/g;
+        return regExp.test(input.value.trim()) ?
+            setSuccessMessage(input) :
+            setErrorMessage(input, 'Invalid phone format') ;
+    },
+    validateUrl: function(input) {
+        const regExp =  /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+        return regExp.test(input.value.trim()) ?
+            setSuccessMessage(input) :
+            setErrorMessage(input, 'Invalid url format (must contain http/https)');
     }
-    return input.value.trim() === '' ? invalid(input, message) : true;
-
 }
 
-/*Validation for Special characters*/
-function specialChar(input, message){
-    const regExp =  /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
-    return regExp.test(input.value.trim()) ? invalid(input, message) : valid(input);
-}
+const setErrorMessage = (input, message) => {
+    const formControl = input.parentElement;
+    const smallInput = formControl.querySelector('small');
 
-/*Email validation*/
-function validateEmail(input) {
-    const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)| + (".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regExp.test(input.value.trim()) ? valid(input) : invalid(input, 'Invalid email format');
-}
+    smallInput.innerText = message;
+    formControl.classList.remove('valid');
+    formControl.classList.add('invalid');
+};
 
-/*Phone validation*/
-function validatePhone(input) {
-    const regExp = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\\./0-9]*$/g;
-    return regExp.test(input.value.trim()) ? valid(input) : invalid(input, 'Invalid phone format');
-}
+const setSuccessMessage = (input) => {
+    const formControl = input.parentElement;
+    const smallInput = formControl.querySelector('small');
 
-/*Url validation*/
-function validateUrl(input) {
-    const regExp =  /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
-    return regExp.test(input.value.trim()) ? valid(input) : invalid(input, 'Invalid url format (must contain http/https)');
-}
+    smallInput.innerText = '';
+    formControl.classList.remove('invalid');
+    formControl.classList.add('valid');
+};
 
-/*Check have email is exist in Local Storage*/
-function checkExist(){
-    if(window.localStorage.getItem('persons') !== null) {
-        let arr = JSON.parse(window.localStorage.getItem('persons'));
-        let elem = document.getElementById('email');
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i].email.toLowerCase() === elem.value.toLowerCase()) {
-                return invalid(elem, "This email is existing in Local Storage");
+const personExist = (personInfo) => {
+    if(myLocalStorage.getItem('personInfo') !== null) {
+        let personObj = JSON.parse(myLocalStorage.getItem('personInfo'));
+        let personEmail = personInfo.email;
+
+        if(personEmail !== null) {
+            for(const item of personObj) {
+                if(item.email.toLowerCase() === personEmail.toLowerCase()) {
+                    return false;
+                }
             }
         }
-        return valid(elem);
     }
     return true;
-}
+};
 
-/*Save Personal Information in Local Storage*/
-function saveToLocalStorage(){
-    let personStorage = window.localStorage;
-    let persons;
-    const person = {
-        name: document.getElementById('name').value,
-        address: document.getElementById('address').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        website: document.getElementById('website').value
-    };
-    if(personStorage.getItem('persons') === null){
-        persons = [];
-    }else{
-        persons = JSON.parse(personStorage.getItem('persons'));
+const saveToLocalStorage = (personObject) => {
+    let persons = [];
+    if(myLocalStorage.getItem('personInfo') !== null){
+        persons = JSON.parse(myLocalStorage.getItem('personInfo'));
     }
-    persons.push(person);
-    personStorage.setItem('persons', JSON.stringify(persons));
-}
-/*Remove the event enter the address field*/
-document.getElementById('address').addEventListener('keydown', (e) => {
-    if(e.key === 'Enter') e.preventDefault();
-});
+    persons.push(personObject);
+    myLocalStorage.setItem('personInfo', JSON.stringify(persons));
+};
 
-/*Validate place*/
-document.getElementById('address').addEventListener('blur',(e)=>{
-    let geocoder = new google.maps.Geocoder();
-    let address = e.target.value;
-    geocoder.geocode({'address': address}, function (results, status) {
-        if (status === 'OK') {
-            valid(e.target);
-            document.getElementById('address').classList.remove("errAddress");
-        } else {
-            invalid(e.target, 'Invalid Address!');
-            document.getElementById('address').classList.add('errAddress');
+const newPerson = (personInputs) => {
+    let personObj = {};
+
+    personInputs.forEach((listElement) => {
+        personObj[listElement.getAttribute("name")] = listElement.value.trim();
+    });
+    return personObj;
+};
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const personInputs = form.querySelectorAll('input:not([type=submit])');
+    let personObj = newPerson(personInputs);
+
+    personInputs.forEach((listElement) => {
+        let nameFunction = listElement.className;
+        let checkExist = arrFunction.find(element => element === nameFunction);
+        if(checkExist !== undefined) {
+            validateObj[nameFunction].call(personObj, listElement);
         }
     });
-});
 
-/*Submit Form*/
-form.addEventListener('submit', (event) => {
-    let flEmpty=flName=flAddress=flEmail=flPhone=flWebsite=true;
-    let fl;
-
-    document.querySelectorAll('.registerForm input[type=text]').forEach(function(element) {
-        flEmpty = isEmpty(element, 'Please enter your ' + element.id);
-        if(element.id === 'name' && flEmpty){
-            flName = specialChar(element, "Name must not contain special characters and numbers!");
-        }
-        if(element.id === 'address' && flEmpty){
-           flAddress = element.classList.contains('errAddress') ? false : true;
-        }
-        if(element.id === 'email' && flEmpty){
-            fl = validateEmail(element);
-            if(fl) flEmail = checkExist();
-        }
-        if(element.id === 'phone' && flEmpty){
-            flPhone = validatePhone(element);
-        }
-        if(element.id === 'website' && flEmpty){
-            flWebsite = validateUrl(element);
-        }
-    });
-    if(!flEmpty || !flName || !flAddress || !flEmail || !flPhone || !flWebsite){
-        event.preventDefault();
-    }else{
-        saveToLocalStorage();
-    }
+    // if(personExist(personObj)){
+    //     saveToLocalStorage(personObj);
+    // }else{
+    //
+    // }
 });

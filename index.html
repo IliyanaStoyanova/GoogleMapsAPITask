@@ -10,73 +10,60 @@
     <link rel="shortcut icon" type="image/jpg" href="images/favicon.ico"/>
 
     <script src="https://kit.fontawesome.com/4fd126fa69.js" crossorigin="anonymous"></script>
-
 </head>
 <body>
-    <div class="main">
-        <!--Personal info form-->
-        <section class="personal-info">
-            <div class="container">
-                <div class="personal-form">
-                    <h2 class="form-title">Personal Information</h2>
-                    <form method="POST" class="registerForm" id="registerForm">
-                        <div class="form-group">
-                            <label for="name"><i class="fas fa-user"></i></label>
-                            <input type="text" id="name" name="name" placeholder="Your Name*" maxlength="50" autocomplete="off" autofocus/>
-                            <span class="invalid"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="address"><i class="fas fa-map-marker-alt"></i></label>
-                            <input type="text" id="address" name="address" placeholder="Your Address" maxlength="255"/>
-                            <span class="invalid"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="email"><i class="fas fa-at"></i></label>
-                            <input type="text" id="email" name="email" placeholder="Your Email*" maxlength="255" autocomplete="off"/>
-                            <span class="invalid"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone"><i class="fas fa-mobile-alt"></i></label>
-                            <input type="text" id="phone" name="phone" placeholder="Your Phone*" maxlength="15" autocomplete="off"/>
-                            <span class="invalid"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="website"><i class="fas fa-globe"></i></label>
-                            <input type="text" id="website" name="website" placeholder="Your Website*" maxlength="255" autocomplete="off"/>
-                            <span class="invalid"></span>
-                        </div>
-                        <div class="form-group form-button">
-                            <input type="submit" name="register" id="register" class="form-submit" value="Register"/>
-                        </div>
-                    </form>
-                </div>
-
-                <!--Google Maps-->
-                <div class="google-maps">
-                    <div id="map"></div>
-                    <div id="infowindow-content">
-                        <span id="place-address"></span>
+<div class="main">
+    <!--Personal info form-->
+    <section class="personal-info">
+        <div class="container">
+            <div class="personal-form">
+                <h2 class="form-title">Personal Information</h2>
+                <form method="POST" class="registerForm" id="registerForm">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i></label>
+                        <input type="text" id="name" class="validateSpecialChar" name="name" placeholder="Your Name*" maxlength="50" autocomplete="off" autofocus/>
+                        <small></small>
                     </div>
+                    <div class="form-group">
+                        <label for="address"><i class="fas fa-map-marker-alt"></i></label>
+                        <input type="text" id="address" name="address" class="validateSpecialChar" placeholder="Your Address*" maxlength="255"/>
+                        <small></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-at"></i></label>
+                        <input type="text" id="email" name="email" class="validateEmail" placeholder="Your Email*" maxlength="50" autocomplete="off"/>
+                        <small></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone"><i class="fas fa-mobile-alt"></i></label>
+                        <input type="text" id="phone" name="phone" class="validatePhone" placeholder="Your Phone*" maxlength="15" autocomplete="off"/>
+                        <small></small>
+                    </div>
+                    <div class="form-group">
+                        <label for="website"><i class="fas fa-globe"></i></label>
+                        <input type="text" id="website" name="website" class="validateUrl" placeholder="Your Website*" maxlength="255" autocomplete="off"/>
+                        <small></small>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="register" id="register" class="form-submit" value="Register"/>
+                    </div>
+                </form>
+            </div>
+
+            <!--Google Maps-->
+            <div class="google-maps">
+                <div id="map"></div>
+                <div id="infowindow-content">
+                    <span id="place-address"></span>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/map.js"></script>
-    <script>
-        function loadScript() {
-            let script = document.createElement('script');
-            script.defer = true;
-            script.async = true;
-            script.type = 'text/javascript';
-            script.src = 'https://maps.googleapis.com/maps/api/js' +
-            '?key=' + config.SECRET_KEY +'&libraries=places&callback=initAddress';
-            document.body.appendChild(script);
-        }
-
-        window.onload = loadScript;
-    </script>
+<script src="js/main.js"></script>
+<!-- <script async
+    src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initAddress">
+</script> -->
 </body>
 </html>
