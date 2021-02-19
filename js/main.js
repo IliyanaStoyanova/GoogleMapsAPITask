@@ -1,12 +1,17 @@
 const form = document.querySelector('.registerForm');
 const myLocalStorage = window.localStorage;
-const arrFunction = ['validateSpecialChar', 'validateEmail', 'validatePhone', 'validateUrl'];
+const arrFunction = ['validateIsEmpty','validateSpecialChar', 'validateEmail', 'validatePhone', 'validateUrl'];
 
 const validateObj = {
+    validateIsEmpty: function(input) {
+        return (input.value.trim() === '') ? 
+            setErrorMessage(input, 'This field is required!') : 
+            setSuccessMessage(input);
+    },
     validateSpecialChar: function(input) {
         const regExp =  /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]/;
         return regExp.test(input.value.trim()) ?
-            setErrorMessage(input, 'The field must not contain special characters and numbers!') :
+            setErrorMessage(input, 'This field must not contain special characters and numbers!') :
             setSuccessMessage(input);
     },
     validateEmail: function(input) {
@@ -36,6 +41,8 @@ const setErrorMessage = (input, message) => {
     smallInput.innerText = message;
     formControl.classList.remove('valid');
     formControl.classList.add('invalid');
+
+    return false;
 };
 
 const setSuccessMessage = (input) => {
@@ -45,6 +52,8 @@ const setSuccessMessage = (input) => {
     smallInput.innerText = '';
     formControl.classList.remove('invalid');
     formControl.classList.add('valid');
+
+    return true;
 };
 
 const personNotExist = (personInfo) => {
@@ -85,16 +94,29 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
     const personInputs = form.querySelectorAll('input:not([type=submit])');
     let personObj = newPerson(personInputs);
-
+    let flagValidation = true;
+    let flagFull = false;
+   
     personInputs.forEach((listElement) => {
-        let nameFunction = listElement.className;
-        let checkExist = arrFunction.find(element => element === nameFunction);
-        if(checkExist !== undefined) {
-            validateObj[nameFunction].call(personObj, listElement);
+        let inputEmpty = listElement.classList.contains('validateIsEmpty');
+        if(inputEmpty) {
+            flagFull = validateObj.validateIsEmpty.call(personObj, listElement);
+        }
+        if(flagFull) {
+            let nameFunction = listElement.className;
+            nameFunction = nameFunction.replace('validateIsEmpty','').trim();
+            const arrClass = nameFunction.split(' ');
+            arrClass.forEach((item) => {   
+                let checkExist = arrFunction.find(element => element === item);
+                if(checkExist !== undefined) {
+                    if(!validateObj[item].call(personObj, listElement)) {
+                        flagValidation = false;
+                    }
+                }
+            });
         }
     });
-
-    if(personNotExist(personObj)){
+    if(flagValidation && personNotExist(personObj)) {
         saveToLocalStorage(personObj);
     }else{
     
