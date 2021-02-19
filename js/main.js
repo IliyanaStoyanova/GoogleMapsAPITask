@@ -47,13 +47,13 @@ const setSuccessMessage = (input) => {
     formControl.classList.add('valid');
 };
 
-const personExist = (personInfo) => {
+const personNotExist = (personInfo) => {
     if(myLocalStorage.getItem('personInfo') !== null) {
         let personObj = JSON.parse(myLocalStorage.getItem('personInfo'));
         let personEmail = personInfo.email;
 
-        if(personEmail !== null) {
-            for(const item of personObj) {
+        if(personEmail !== null){
+           for(const item of personObj) {
                 if(item.email.toLowerCase() === personEmail.toLowerCase()) {
                     return false;
                 }
@@ -94,9 +94,9 @@ form.addEventListener('submit', (e) => {
         }
     });
 
-    // if(personExist(personObj)){
-    //     saveToLocalStorage(personObj);
-    // }else{
-    //
-    // }
+    if(personNotExist(personObj)){
+        saveToLocalStorage(personObj);
+    }else{
+    
+    }
 });
