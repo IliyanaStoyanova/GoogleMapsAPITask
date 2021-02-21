@@ -95,7 +95,13 @@ input:focus {
   padding: 2.5rem;
   margin: 0 auto;
 }
-
+.message-submit {
+  display: none;
+}
+.map-submit {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
 .form-group {
   position: relative;
   margin-bottom: 1.5rem;
